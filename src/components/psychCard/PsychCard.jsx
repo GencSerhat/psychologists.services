@@ -1,11 +1,15 @@
+import { useMemo, useState } from "react";
 import styles from "./PsychCard.module.css";
 
 export default function PsychCard({
   data,
   isFavorite = false,
   onToggleFavorite,
-  onReadMore
+  onReadMore,           // artık gerekmiyor, ama kalsın (çağırmayacağız)
+  onAppointment
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   const {
     avatar_url,
     name,
@@ -15,8 +19,18 @@ export default function PsychCard({
     license,
     specialization,
     initial_consultation,
-    about
+    about,
+    reviews
   } = data;
+
+  const safeReviews = useMemo(() => {
+    const arr = Array.isArray(reviews)
+      ? reviews
+      : typeof reviews === "object" && reviews !== null
+      ? Object.values(reviews)
+      : [];
+    return arr.slice(0, 3); // makete benzer şekilde birkaçını göster
+  }, [reviews]);
 
   return (
     <div className={styles.card}>
@@ -50,9 +64,54 @@ export default function PsychCard({
 
         <div className={styles.about}>{about}</div>
 
-        <button className={styles.read} onClick={onReadMore}>
-          Read more
-        </button>
+        {!expanded ? (
+          <button className={styles.read} onClick={() => setExpanded(true)}>
+            Read more
+          </button>
+        ) : (
+          <>
+            <div className={styles.details}>
+              <div className={styles.reviews}>
+                {safeReviews.length === 0 ? (
+                  <div className={styles.reviewText}>Henüz yorum yok.</div>
+                ) : (
+                  safeReviews.map((r, i) => {
+                    const author = r.author || r.user || "Anonymous";
+                    const initial = author.trim().charAt(0).toUpperCase();
+                    const stars = Number(r.rating || r.stars || 0).toFixed(1);
+                    return (
+                      <div key={i} className={styles.reviewItem}>
+                        <div className={styles.reviewAvatar}>{initial}</div>
+                        <div className={styles.reviewBody}>
+                          <div className={styles.reviewHead}>
+                            <span className={styles.reviewName}>{author}</span>
+                            <span>⭐ {stars}</span>
+                          </div>
+                          <div className={styles.reviewText}>
+                            {r.comment || r.text || ""}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className={styles.cta}>
+                <button
+                  className={styles.appointBtn}
+                  onClick={onAppointment}
+                >
+                  Make an appointment
+                </button>
+              </div>
+            </div>
+
+            <button className={styles.read} onClick={() => setExpanded(false)}>
+              Hide
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

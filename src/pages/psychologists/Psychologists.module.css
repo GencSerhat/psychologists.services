@@ -1,0 +1,59 @@
+.wrap {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.more {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+.btnMore {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+}
+.btnMore:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* önceki basit kart iskeletinden kalan sınıflar (zararı yok) */
+.card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+}
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f3f4f6;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.name {
+  font-weight: 600;
+}
+.meta {
+  font-size: 13px;
+  color: #6b7280;
+}

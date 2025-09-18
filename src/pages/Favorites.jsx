@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo } from "react";
 import styles from "../pages/psychologists/Psychologists.module.css";
 import { db } from "../services/firebase.js";
 import { ref, get } from "firebase/database";
 import PsychCard from "../components/psychCard/PsychCard.jsx";
 import { useAuth } from "../store/auth.jsx"
-
+import { subscribeFavorites, toggleFavoriteRTDB } from "../services/favorites.js";
+import Modal from "../components/modal/Modal.jsx";
+import AppointmentModal from "../components/appointmentModal/AppointmentModal.jsx";
 export default function Favorites() {
-  const { user } = useAuth();
+const { user } = useAuth();
   const [all, setAll] = useState([]);
   const [favIds, setFavIds] = useState(new Set());
-  const [items, setItems] = useState([]);
+  const [appTarget, setAppTarget] = useState(null);
 
   // Tüm psikologları yükle
   useEffect(() => {
@@ -23,42 +25,28 @@ export default function Favorites() {
           .map(([id, v]) => ({ id, ...v }));
         setAll(arr);
       } catch (e) {
-        console.error("load fav base failed:", e);
+        console.error("load favorites base failed:", e);
       }
     })();
   }, []);
 
-  // Kullanıcının favorilerini localStorage'dan yükle
+  // Kullanıcının favorilerini RTDB'den dinle
   useEffect(() => {
     if (!user) return;
-    const key = `fav:${user.uid}`;
-    try {
-      const raw = localStorage.getItem(key);
-      const arr = raw ? JSON.parse(raw) : [];
-      setFavIds(new Set(arr));
-    } catch {
-      setFavIds(new Set());
-    }
+    const unsub = subscribeFavorites(user.uid, (setFromDB) => setFavIds(setFromDB));
+    return () => unsub && unsub();
   }, [user]);
 
-  // Favori id’lere göre filtrele
-  useEffect(() => {
-    if (!all.length) { setItems([]); return; }
-    setItems(all.filter((p) => favIds.has(p.id)));
-  }, [all, favIds]);
+  // Favori listesi
+  const items = useMemo(() => all.filter((p) => favIds.has(p.id)), [all, favIds]);
 
-  const toggleFavorite = (id) => {
+  const toggleFavorite = async (id) => {
     if (!user) return;
-    const key = `fav:${user.uid}`;
-    const next = new Set(favIds);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setFavIds(next);
-    localStorage.setItem(key, JSON.stringify([...next]));
-  };
-
-  const handleReadMore = (item) => {
-    console.log("read more:", item.id);
+    try {
+      await toggleFavoriteRTDB(user.uid, id);
+    } catch (e) {
+      console.error("toggle favorite failed:", e);
+    }
   };
 
   return (
@@ -73,11 +61,15 @@ export default function Favorites() {
               data={p}
               isFavorite={favIds.has(p.id)}
               onToggleFavorite={() => toggleFavorite(p.id)}
-              onReadMore={() => handleReadMore(p)}
+              onAppointment={() => setAppTarget(p)}
             />
           ))}
         </div>
       )}
+
+      <Modal open={!!appTarget} onClose={() => setAppTarget(null)}>
+        <AppointmentModal psych={appTarget} onClose={() => setAppTarget(null)} />
+      </Modal>
     </div>
   );
 }

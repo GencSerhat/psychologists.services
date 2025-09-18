@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
-import Home from "./pages/Home.jsx";
+import Home from "./pages/home/Home.jsx";
 import Psychologists from "./pages/psychologists/Psychologists.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -8,9 +8,11 @@ import Modal from "./components/modal/Modal.jsx";
 import AuthModal from "./components/authModal/AuthModal.jsx";
 import { useAuth } from "./store/auth.jsx";
 import RequireAuth from "./components/RequireAuth.jsx";
+import Navbar from "./components/navbar/Navbar.jsx";
 
 export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
+  const [lockedTab, setLockedTab] = useState(null);
   const { user, loading, signOut } = useAuth();
   const location = useLocation();
 
@@ -20,33 +22,21 @@ export default function App() {
 
   // RequireAuth, yetkisiz kullanıcıyı "/"a state=requireAuth ile geri yollar.
   // Bunu yakalayıp modalı otomatik açıyoruz.
-  useEffect(() => {
-    if (location.state?.requireAuth) setAuthOpen(true);
-  }, [location.state]);
+useEffect(() => {
+  if (location.state?.requireAuth) {
+    setLockedTab("login");
+    setAuthOpen(true);
+  }
+}, [location.state]);
 
   return (
     <>
-      <nav>
-        <Link to="/">Home</Link>{" | "}
-        <Link to="/psychologists">Psychologists</Link>{" | "}
-        <Link to="/favorites">Favorites</Link>{" | "}
-        {!loading && (
-          user ? (
-            <>
-              <span style={{ marginLeft: 8 }}>
-                {user.displayName || user.email}
-              </span>{" "}
-              <button onClick={signOut} style={{ marginLeft: 8 }}>
-                Çıkış
-              </button>
-            </>
-          ) : (
-            <button onClick={() => setAuthOpen(true)} style={{ marginLeft: 8 }}>
-              Giriş / Kayıt
-            </button>
-          )
-        )}
-      </nav>
+   <Navbar
+  user={user}
+  loading={loading}
+  onOpenAuth={(mode) => { setLockedTab(mode); setAuthOpen(true); }}
+  onSignOut={signOut}
+/>
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -63,8 +53,8 @@ export default function App() {
       </Routes>
 
       <Modal open={authOpen} onClose={() => setAuthOpen(false)}>
-        <AuthModal />
-      </Modal>
+  <AuthModal lockedTab={lockedTab} />
+</Modal>
     </>
   );
 }

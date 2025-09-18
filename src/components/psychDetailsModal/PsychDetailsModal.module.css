@@ -1,0 +1,100 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f3f4f6;
+}
+.title {
+  display: flex;
+  flex-direction: column;
+}
+.name {
+  font-size: 18px;
+  font-weight: 700;
+}
+.sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pill {
+  font-size: 12px;
+  background: #f3f4f6;
+  color: #374151;
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  margin-top: 6px;
+}
+.about {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.reviews {
+  max-height: 220px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+.review {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+.reviewHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.reviewBody {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+.primary {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+}

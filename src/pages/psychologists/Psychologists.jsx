@@ -1,11 +1,15 @@
-import { useEffect, useState,useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Psychologists.module.css";
 import { db } from "../../services/firebase.js";
 import { ref, get } from "firebase/database";
 import PsychCard from "../../components/psychCard/PsychCard.jsx";
 import SortBar from "../../components/sortBar/SortBar.jsx";
-import { useAuth } from "../../store/auth.jsx"
+import { useAuth } from "../../store/auth.jsx";
+import Modal from "../../components/modal/Modal.jsx";
+import PsychDetailsModal from "../../components/psychDetailsModal/PsychDetailsModal.jsx";
+import AppointmentModal from "../../components/appointmentModal/AppointmentModal.jsx";
+import { subscribeFavorites, toggleFavoriteRTDB } from "../../services/favorites.js";
 
 
 export default function Psychologists() {
@@ -14,11 +18,12 @@ export default function Psychologists() {
   const [limit, setLimit] = useState(3);
   const [sort, setSort] = useState("az");
   const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [appTarget, setAppTarget] = useState(null);
 
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // İlk yüklemede tüm veriyi çek
+  // Veriyi yükle
   useEffect(() => {
     (async () => {
       try {
@@ -35,20 +40,16 @@ export default function Psychologists() {
     })();
   }, []);
 
-  // Kullanıcı değişince favorileri localStorage'dan yükle
+  // Favorileri RTDB'den dinle
   useEffect(() => {
     if (!user) {
       setFavoriteIds(new Set());
       return;
     }
-    const key = `fav:${user.uid}`;
-    try {
-      const raw = localStorage.getItem(key);
-      const arr = raw ? JSON.parse(raw) : [];
-      setFavoriteIds(new Set(arr));
-    } catch {
-      setFavoriteIds(new Set());
-    }
+    const unsub = subscribeFavorites(user.uid, (setFromDB) => {
+      setFavoriteIds(setFromDB);
+    });
+    return () => unsub && unsub();
   }, [user]);
 
   // Sıralama
@@ -79,27 +80,22 @@ export default function Psychologists() {
     return cp;
   }, [allItems, sort]);
 
-  // Görüntülenecek dilim
+  // Dilim
   useEffect(() => {
     setItems(sorted.slice(0, limit));
   }, [sorted, limit]);
 
-  const handleReadMore = (item) => {
-    console.log("read more:", item.id);
-  };
-
-  const toggleFavorite = (id) => {
-    // Yetkisiz → anasayfaya yönlendir, modal otomatik açılsın
+  const toggleFavorite = async (id) => {
     if (!user) {
       navigate("/", { state: { requireAuth: true } });
       return;
     }
-    const key = `fav:${user.uid}`;
-    const next = new Set(favoriteIds);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setFavoriteIds(next);
-    localStorage.setItem(key, JSON.stringify([...next]));
+    try {
+      await toggleFavoriteRTDB(user.uid, id);
+      // State, subscribeFavorites ile otomatik güncellenir
+    } catch (e) {
+      console.error("toggle favorite failed:", e);
+    }
   };
 
   return (
@@ -113,7 +109,7 @@ export default function Psychologists() {
             data={p}
             isFavorite={favoriteIds.has(p.id)}
             onToggleFavorite={() => toggleFavorite(p.id)}
-            onReadMore={() => handleReadMore(p)}
+            onAppointment={() => setAppTarget(p)}
           />
         ))}
       </div>
@@ -127,6 +123,10 @@ export default function Psychologists() {
           Load more
         </button>
       </div>
+
+      <Modal open={!!appTarget} onClose={() => setAppTarget(null)}>
+        <AppointmentModal psych={appTarget} onClose={() => setAppTarget(null)} />
+      </Modal>
     </div>
   );
 }
