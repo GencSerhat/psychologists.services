@@ -1,0 +1,26 @@
+.backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:grid;
+  place-items:center;
+  z-index:1000;
+}
+.panel{
+  width:min(520px,92vw);
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  padding:20px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:8px;
+  right:10px;
+  border:none;
+  background:transparent;
+  font-size:22px;
+  cursor:pointer;
+  line-height:1;
+}
