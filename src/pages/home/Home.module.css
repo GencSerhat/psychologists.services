@@ -10,13 +10,13 @@
   align-items: center;
 }
 .title {
-    font-family: "Inter", sans-serif;
-font-weight: 600;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
 
   font-size: 80px;
   line-height: 82px;
 
-  letter-spacing: -2%
+  letter-spacing: -2%;
 }
 .accent {
   font-family: "Inter", sans-serif;
@@ -28,24 +28,35 @@ font-weight: 600;
   color: #3430ff;
 }
 .subtitle {
-   font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -2%;
   margin-top: 14px;
-  color: #4b5563;
+  color: #191a15;
   max-width: 56ch;
 }
 .cta {
+  width: 235px;
+  height: 60px;
+  border-radius: 30px;
+  gap: 18px;
+  background-color: #3470ff;
   margin-top: 26px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 44px;
+
+  justify-content: center;
   padding: 0 20px;
-  border-radius: 999px;
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: #fff;
   cursor: pointer;
-  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -1%;
+  color: #fbfbfb;
+  text-decoration: none;
 }
 .media {
   justify-self: end;

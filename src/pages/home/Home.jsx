@@ -18,7 +18,7 @@ export default function Home() {
 
         <div className={styles.media}>
           {/* İstersen burada kendi görselini kullan: /public/hero.jpg */}
-          <img src="https://images.unsplash.com/photo-1590648982820-9f1f9b4e5b09?q=80&w=1200&auto=format&fit=crop" alt="Psychologist session" />
+          <img src="./images/image1.png" alt="Psychologist session" />
         </div>
       </section>
     </main>
