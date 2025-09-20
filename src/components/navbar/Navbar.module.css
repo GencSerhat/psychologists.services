@@ -15,14 +15,22 @@
   justify-content: space-between;
 }
 .brand {
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -2%;
   text-decoration: none;
-  color: #111827;
+  color: #191a15;
 }
 .brand em {
-  color: #2563eb;
+  font-family: "Inter", sans-serif;
+  color: #3470ff;
   font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -2%;
 }
 .nav {
   display: flex;
@@ -30,7 +38,12 @@
   align-items: center;
 }
 .link {
-  color: #374151;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -1%;
+  color: #191a15;
   text-decoration: none;
   font-weight: 500;
   padding: 6px 8px;
@@ -50,15 +63,30 @@
   color: #374151;
 }
 .btn {
-  height: 34px;
+  font-family: "Inter", sans-serif;
+  width: 124px;
+  height: 48px;
+  gap: 8px;
   padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: #fff;
+  border-radius: 30px;
+  border: 1px solid #000000;
+  background: #fdfeff;
+  color: #191a15;
   cursor: pointer;
 }
 .btnGhost {
   background: #fff;
   color: #2563eb;
+}
+.btnReg{
+    font-family: "Inter", sans-serif;
+  width: 171px;
+  height: 48px;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 30px;
+  border: 1px solid #000000;
+  background: #3470ff;
+  color: #fbfbfb;
+  cursor: pointer;
 }

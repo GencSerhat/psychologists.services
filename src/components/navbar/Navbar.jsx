@@ -51,7 +51,7 @@ export default function Navbar({ user, loading, onOpenAuth, onSignOut }) {
                 <button className={`${styles.btn} ${styles.btnGhost}`} onClick={() => onOpenAuth("login")}>
                   Log In
                 </button>
-               <button className={styles.btn} onClick={() => onOpenAuth("register")}>
+               <button className={styles.btnReg} onClick={() => onOpenAuth("register")}>
                   Registration
                 </button>
               </>
