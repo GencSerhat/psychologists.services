@@ -58,6 +58,7 @@
   border-radius: 12px;
   padding: 0 12px;
   background: #fff;
+  width: -webkit-fill-available;
 }
 .textarea {
   min-height: 100px;
@@ -66,6 +67,7 @@
   padding: 10px;
   background: #fff;
   resize: vertical;
+  width: -webkit-fill-available;
 }
 .input:focus,
 .textarea:focus {

@@ -28,7 +28,7 @@
   cursor: default;
 }
 
-/* önceki basit kart iskeletinden kalan sınıflar (zararı yok) */
+
 .card {
   display: flex;
   gap: 12px;

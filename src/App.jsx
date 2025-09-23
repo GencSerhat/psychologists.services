@@ -20,8 +20,7 @@ export default function App() {
     if (user) setAuthOpen(false);
   }, [user]);
 
-  // RequireAuth, yetkisiz kullanıcıyı "/"a state=requireAuth ile geri yollar.
-  // Bunu yakalayıp modalı otomatik açıyoruz.
+ 
 useEffect(() => {
   if (location.state?.requireAuth) {
     setLockedTab("login");

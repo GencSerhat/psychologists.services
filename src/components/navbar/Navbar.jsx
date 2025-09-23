@@ -1,3 +1,4 @@
+// Navbar.jsx
 import { NavLink, Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
@@ -19,6 +20,7 @@ export default function Navbar({ user, loading, onOpenAuth, onSignOut }) {
           >
             Home
           </NavLink>
+
           <NavLink
             to="/psychologists"
             className={({ isActive }) =>
@@ -27,14 +29,18 @@ export default function Navbar({ user, loading, onOpenAuth, onSignOut }) {
           >
             Psychologists
           </NavLink>
-          <NavLink
-            to="/favorites"
-            className={({ isActive }) =>
-              isActive ? `${styles.link} ${styles.linkActive}` : styles.link
-            }
-          >
-            Favorites
-          </NavLink>
+
+          {/* YALNIZCA GİRİŞ VARSA GÖSTER */}
+          {!loading && user && (
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.linkActive}` : styles.link
+              }
+            >
+              Favorites
+            </NavLink>
+          )}
         </nav>
 
         <div className={styles.right}>
@@ -51,7 +57,7 @@ export default function Navbar({ user, loading, onOpenAuth, onSignOut }) {
                 <button className={`${styles.btn} ${styles.btnGhost}`} onClick={() => onOpenAuth("login")}>
                   Log In
                 </button>
-               <button className={styles.btnReg} onClick={() => onOpenAuth("register")}>
+                <button className={styles.btnReg} onClick={() => onOpenAuth("register")}>
                   Registration
                 </button>
               </>

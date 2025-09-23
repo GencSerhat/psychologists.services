@@ -5,7 +5,7 @@ export default function PsychCard({
   data,
   isFavorite = false,
   onToggleFavorite,
-  onReadMore,           // artık gerekmiyor, ama kalsın (çağırmayacağız)
+ 
   onAppointment
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -29,7 +29,7 @@ export default function PsychCard({
       : typeof reviews === "object" && reviews !== null
       ? Object.values(reviews)
       : [];
-    return arr.slice(0, 3); // makete benzer şekilde birkaçını göster
+    return arr.slice(0, 3);
   }, [reviews]);
 
   return (
